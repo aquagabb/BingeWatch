@@ -76,6 +76,19 @@ def unsnooze_serie(title):
         print("Failed to update sqlite table", error)
 
 
+def update_score(title, score):
+    try:
+        connection = sqlite3.connect('imdb.db')
+        cursor = connection.cursor()
+        sql_update_query = """UPDATE series SET score = ? WHERE title = ?"""
+        cursor.execute(sql_update_query, (score, title,))
+        connection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
+
+
 def print_series():
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()

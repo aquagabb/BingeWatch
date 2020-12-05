@@ -13,8 +13,8 @@ def get_informations(movie):
     search_title = 'meta name="title" content='
     result = re.search(search_title, r.text)
     nume_titlu = result.string[result.end()+1:result.end()+50]
-    index1 = nume_titlu.find('(')
-    nume_titlu = nume_titlu[0:index1]
+    index_titlu = nume_titlu.find('(')
+    nume_titlu = nume_titlu[0:index_titlu-1]
     # getEpisodes
     search_episodes = 'span class="bp_sub_heading">'
     result_episodes = re.search(search_episodes, r.text)
@@ -24,9 +24,9 @@ def get_informations(movie):
 
     return nume_titlu, episoade
 
-
-id_movie = input()
-
-titlu, episoade_curente = get_informations(id_movie.replace(" ",""))
-print(titlu)
-print(episoade_curente)
+#
+# id_movie = input()
+#
+# titlu, episoade_curente = get_informations(id_movie.replace(" ", ""))
+# print(titlu)
+# print(episoade_curente)
