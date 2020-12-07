@@ -9,20 +9,22 @@ def get_informations(movie):
         print("HELOO")
         serial_url = "https://www.imdb.com/title/" + movie + "/"
     r = requests.get(url=serial_url)
-    # getTitle
-    search_title = 'meta name="title" content='
-    result = re.search(search_title, r.text)
-    nume_titlu = result.string[result.end()+1:result.end()+50]
-    index_titlu = nume_titlu.find('(')
-    nume_titlu = nume_titlu[0:index_titlu-1]
-    # getEpisodes
-    search_episodes = 'span class="bp_sub_heading">'
-    result_episodes = re.search(search_episodes, r.text)
-    episoade = result_episodes.string[result_episodes.end():result_episodes.end()+15]
-    index_episodes = episoade.find('episodes')
-    episoade = episoade[0:index_episodes-1]
-
-    return nume_titlu, episoade
+    if r.status_code == 200:
+        # getTitle
+        search_title = 'meta name="title" content='
+        result = re.search(search_title, r.text)
+        nume_titlu = result.string[result.end()+1:result.end()+50]
+        index_titlu = nume_titlu.find('(')
+        nume_titlu = nume_titlu[0:index_titlu-1]
+        # getEpisodes
+        search_episodes = 'span class="bp_sub_heading">'
+        result_episodes = re.search(search_episodes, r.text)
+        episoade = result_episodes.string[result_episodes.end():result_episodes.end()+15]
+        index_episodes = episoade.find('episodes')
+        episoade = episoade[0:index_episodes-1]
+        return nume_titlu, episoade
+    elif r.status_code == 404:
+        return "", ""
 
 
 def get_episodes(link):
@@ -31,14 +33,18 @@ def get_episodes(link):
     else:
         serial_url = "https://www.imdb.com/title/" + link + "/"
     r = requests.get(url=serial_url)
-    # getEpisodes
-    search_episodes = 'span class="bp_sub_heading">'
-    result_episodes = re.search(search_episodes, r.text)
-    episoade = result_episodes.string[result_episodes.end():result_episodes.end()+15]
-    index_episodes = episoade.find('episodes')
-    episoade = episoade[0:index_episodes-1]
 
-    return episoade
+    if r.status_code == 200:
+        # getEpisodes
+        search_episodes = 'span class="bp_sub_heading">'
+        result_episodes = re.search(search_episodes, r.text)
+        episoade = result_episodes.string[result_episodes.end():result_episodes.end()+15]
+        index_episodes = episoade.find('episodes')
+        episoade = episoade[0:index_episodes-1]
+        return episoade
+    elif r.status_code == 404:
+        episoade = 0
+        return episoade
 #
 # id_movie = input()
 #

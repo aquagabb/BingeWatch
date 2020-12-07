@@ -6,16 +6,19 @@ from datetime import datetime
 def adaugare_serial(link, score):
     link_imdb = link
     title, episodes = imdb.get_informations(link.replace(" ", ""))
-    print("Numarul de episoade al serialului "+title+" este "+episodes)
-    last_episode = input("Care a fost ultimul episod vazut ? : ")
-    date_entry = input("Introdu data in care ai vazut ultimul episod (Format:year-month-day-hour) sau today :")
-    if date_entry.find("today") != -1:
-        last_view = datetime.now()
+    if title != "" and episodes != "":
+        print("Numarul de episoade al serialului " + title + " este " + episodes)
+        last_episode = input("Care a fost ultimul episod vazut ? : ")
+        date_entry = input("Introdu data in care ai vazut ultimul episod (Format:year-month-day-hour) sau today :")
+        if date_entry.find("today") != -1:
+            last_view = datetime.now()
+        else:
+            year, month, day, hour = map(int, date_entry.split('-'))
+            last_view = datetime(year, month, day, hour)
+        snooze = 0
+        database.add_serie(title, episodes, int(score), link_imdb, last_episode, last_view, snooze)
     else:
-        year, month, day, hour = map(int, date_entry.split('-'))
-        last_view = datetime(year, month, day, hour)
-    snooze = 0
-    database.add_serie(title, episodes, int(score), link_imdb, last_episode, last_view, snooze)
+        print("Nu s-a putut face request de la IMDB")
 
 
 def listare():
@@ -55,6 +58,8 @@ def get_series():
             print("Numarul vechi de episoade " + str(current_episodes))
             print("Numarul nou de episoade " + str(new_episodes))
             print("Ultimul episod pe care l-ai vazut a fost : " + str(last_episode))
-            print("Au mai aparut " + str(new_episodes-current_episodes) + " episoade noi")
+            print("Au mai aparut " + str(new_episodes - current_episodes) + " episoade noi")
             print("=======================================================================")
             # database.update_episodes(title,new_episodes)
+        elif new_episodes == 0:
+            print("Nu s-a putut face request de la IMDB")
