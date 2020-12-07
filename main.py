@@ -1,33 +1,51 @@
-
 import commands
+import threading
 
 
-print("Comenzile existente sunt :")
-print("                          Adaugare serial")
-print("                          Stergere serial")
-print("                          Modificare scor")
-print("                          snooze/unsnooze")
-print("                          Listare")
+def task1():
+    print("Comenzile existente sunt :")
+    print("                          Adaugare serial")
+    print("                          Stergere serial")
+    print("                          Modificare scor")
+    print("                          snooze/unsnooze")
+    print("                          Listare")
 
-comanda = input("Introdu Comanda : ")
+    # database.add_serie('Costume', 120, 10, 'https://www.imdb.com/title/tt1632701/?ref_=fn_al_tt_1', 120, datetime.now(), 0)
 
-if comanda.find("Adaugare serial") != -1:
-    link = input("Introdu link : ")
-    scor = input("Introdu scor : ")
-    commands.adaugare_serial(link, scor)
-elif comanda.find("Listare") != -1:
-    commands.listare()
-elif comanda.find("Stergere serial") != -1:
-    title = input("Ce serial vrei sa stergi ? : ")
-    commands.delete_serie(title)
-elif comanda.find("Modificare scor") != -1:
-    title = input("Ce serial vrei sa modifici ? : ")
-    score = input("Introdu scor : ")
-    commands.modify_score(title, score)
-elif comanda.find("unsnooze") != -1:
-    title = input("Ce serial vrei sa pui pe unsnooze ? : ")
-    commands.unsnooze_serie(title)
-elif comanda.find("snooze") != -1:
-    title = input("Ce serial vrei sa pui pe snooze ? : ")
-    commands.snooze_serie(title)
+    comanda = input("Introdu Comanda : ")
 
+    if comanda.find("Adaugare serial") != -1:
+        link = input("Introdu link : ")
+        scor = input("Introdu scor : ")
+        commands.adaugare_serial(link, scor)
+    elif comanda.find("Listare") != -1:
+        # commands.listare()
+        commands.get_series()
+    elif comanda.find("Stergere serial") != -1:
+        title = input("Ce serial vrei sa stergi ? : ")
+        commands.delete_serie(title)
+    elif comanda.find("Modificare scor") != -1:
+        title = input("Ce serial vrei sa modifici ? : ")
+        score = input("Introdu scor : ")
+        commands.modify_score(title, score)
+    elif comanda.find("unsnooze") != -1:
+        title = input("Ce serial vrei sa pui pe unsnooze ? : ")
+        commands.unsnooze_serie(title)
+    elif comanda.find("snooze") != -1:
+        title = input("Ce serial vrei sa pui pe snooze ? : ")
+        commands.snooze_serie(title)
+
+
+def task2():
+    print("YOUTUBE")
+
+
+t1 = threading.Thread(target=task1, name='t1')
+t2 = threading.Thread(target=task2, name='t2')
+
+# starting threads
+t2.start()
+t1.start()
+# wait until all threads finish
+t1.join()
+t2.join()

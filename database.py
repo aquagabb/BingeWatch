@@ -98,3 +98,28 @@ def print_series():
     for i in records:
         print(i)
     cursor.close()
+
+
+def get_series():
+    connection = sqlite3.connect('imdb.db')
+    cursor = connection.cursor()
+    sqlite_select_query = """SELECT title,episodes,score,linkImdb,lastEpisode 
+                             FROM series 
+                             WHERE snooze= 0
+                             ORDER BY score DESC"""
+    cursor.execute(sqlite_select_query)
+    records = cursor.fetchall()
+    return records
+
+
+def update_episodes(title, episodes):
+    try:
+        connection = sqlite3.connect('imdb.db')
+        cursor = connection.cursor()
+        sql_update_query = """UPDATE series SET episodes = ? WHERE title = ?"""
+        cursor.execute(sql_update_query, (episodes, title,))
+        connection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update sqlite table", error)
