@@ -36,3 +36,25 @@ def unsnooze_serie(title):
 
 def modify_score(title, score):
     database.update_score(title, score)
+
+
+def get_series():
+    list_series = database.get_series()
+    for serie in list_series:
+        print(serie)
+    for serie in list_series:
+        title = serie[0]
+        current_episodes = int(serie[1])
+        score = serie[2]
+        link = str(serie[3])
+        last_episode = serie[4]
+        new_episodes = int(imdb.get_episodes(link))
+        if current_episodes < new_episodes:
+            print("Titlul serialului :" + title)
+            print("Scorul : " + str(score))
+            print("Numarul vechi de episoade " + str(current_episodes))
+            print("Numarul nou de episoade " + str(new_episodes))
+            print("Ultimul episod pe care l-ai vazut a fost : " + str(last_episode))
+            print("Au mai aparut " + str(new_episodes-current_episodes) + " episoade noi")
+            print("=======================================================================")
+            # database.update_episodes(title,new_episodes)
