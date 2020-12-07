@@ -24,6 +24,21 @@ def get_informations(movie):
 
     return nume_titlu, episoade
 
+
+def get_episodes(link):
+    if link.find('https:') != -1:
+        serial_url = link
+    else:
+        serial_url = "https://www.imdb.com/title/" + link + "/"
+    r = requests.get(url=serial_url)
+    # getEpisodes
+    search_episodes = 'span class="bp_sub_heading">'
+    result_episodes = re.search(search_episodes, r.text)
+    episoade = result_episodes.string[result_episodes.end():result_episodes.end()+15]
+    index_episodes = episoade.find('episodes')
+    episoade = episoade[0:index_episodes-1]
+
+    return episoade
 #
 # id_movie = input()
 #
