@@ -63,3 +63,13 @@ def get_series():
             # database.update_episodes(title,new_episodes)
         elif new_episodes == 0:
             print("Nu s-a putut face request de la IMDB")
+
+
+def seasons_episodes(link):
+    seasons, new_link = imdb.get_numberOfSeasons(link)
+    number_seasons = int(seasons)
+    while number_seasons > 0:
+        number_seasons = number_seasons - 1
+        link_episodes = 'https://www.imdb.com' + new_link + str(number_seasons)
+        number_episodes = imdb.get_numberOfEpisodes_season(link_episodes)
+        print("Season: " + str(number_seasons)+", Episodes: " + str(number_episodes))
