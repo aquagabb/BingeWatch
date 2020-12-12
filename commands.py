@@ -40,10 +40,6 @@ def adaugare_serial(link, score):
     print(database.print_youtube())
 
 
-def listare():
-    database.print_series()
-
-
 def delete_serie(title):
     database.delete_serie(title)
 
@@ -60,7 +56,7 @@ def modify_score(title, score):
     database.update_score(title, score)
 
 
-def get_series():
+def listare():
     list_series = database.get_series()
     for serie in list_series:
         print(serie)
@@ -109,4 +105,49 @@ def modify_last_episode():
                     else:
                         print("Acest episod nu exista,mai incearca !")
         if verificare_1 == 1:
+            print("Acest serial nu se afla in baza de date !")
+
+
+def search_youtube():
+    list_series = database.get_series()
+    titles = ""
+    for serie in list_series:
+        titles = titles + serie[0] + ";"
+    print(titles)
+    verificare_1 = 0
+    while verificare_1 == 0:
+        title = input("Ce serial vrei sa cauti ? : ")
+        for serie in list_series:
+            title_database = serie[0]
+            link = str(serie[3])
+            if title_database == title:
+                verificare_1 = 1
+                list_series = database.get_series()
+                seasons, new_link = request.get_numberOfSeasons(link)
+                number_seasons = int(seasons)
+                verificare_2 = 0
+                print("Numarul maxim de sezoane este :" + str(number_seasons))
+                while verificare_2 == 0:
+                    season_input = input("Sezonul : ")
+                    if 0 < int(season_input) <= number_seasons:
+                        verificare_2 = 1
+                        link_episodes = 'https://www.imdb.com' + new_link + season_input
+                        number_episodes = request.get_numberOfEpisodes_season(link_episodes)
+                        verificare_3 = 0
+                        print("Numarul maxim de episoade este :" + str(number_episodes))
+                        while verificare_3 == 0:
+                            episode_input = input("Episodul : ")
+                            if 0 < int(episode_input) <= int(number_episodes):
+                                verificare_3 = 1
+                                query = title + ' season ' + season_input + ' episode ' + episode_input
+                                link_youtube = request.videos_youtube(query)
+                                print(query + '  ' + link_youtube)
+                                print("====================================")
+                                print("Comanda a fost efectuata cu succes !")
+                                print("====================================")
+                            else:
+                                print("Acest episod nu exista,mai incearca !")
+                    else:
+                        print("Acest sezon nu exista,mai incearca !")
+        if verificare_1 == 0:
             print("Acest serial nu se afla in baza de date !")

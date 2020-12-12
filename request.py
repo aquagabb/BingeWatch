@@ -44,6 +44,7 @@ def get_episodes(link):
         return episoade
     elif r.status_code == 404:
         episoade = 0
+        print("EROR 404")
         return episoade
 
 
