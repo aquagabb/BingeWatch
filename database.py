@@ -118,23 +118,33 @@ def update_score(title, score):
         print("Failed to update sqlite table", error)
 
 
-def print_series():
+def get_all_series():
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
-    sqlite_select_query = """SELECT * FROM series"""
+    sqlite_select_query = """SELECT * FROM series ORDER BY score DESC"""
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()
-    for i in records:
-        print(i)
-    cursor.close()
+    return records
 
 
 def get_series():
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
-    sqlite_select_query = """SELECT title,episodes,score,linkImdb,lastEpisode 
+    sqlite_select_query = """SELECT title,episodes,score,linkImdb,lastEpisode,snooze
                              FROM series 
                              WHERE snooze= 0
+                             ORDER BY score DESC"""
+    cursor.execute(sqlite_select_query)
+    records = cursor.fetchall()
+    return records
+
+
+def get_series_snooze():
+    connection = sqlite3.connect('imdb.db')
+    cursor = connection.cursor()
+    sqlite_select_query = """SELECT title,snooze
+                             FROM series 
+                             WHERE snooze= 1
                              ORDER BY score DESC"""
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()

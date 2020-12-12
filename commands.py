@@ -40,20 +40,101 @@ def adaugare_serial(link, score):
     print(database.print_youtube())
 
 
-def delete_serie(title):
-    database.delete_serie(title)
+def delete_serie():
+    list_series = database.get_all_series()
+    titles = ""
+    for serie in list_series:
+        titles = titles + serie[0] + " ; "
+    print("")
+    print(titles)
+    print("")
+    verificare_1 = 0
+    while verificare_1 == 0:
+        title = input("Ce serial vrei sa stergi ? : ")
+        for serie in list_series:
+            title_database = serie[0]
+            if title_database == title:
+                verificare_1 = 1
+                database.delete_serie(title)
+                print("====================================")
+                print("Comanda a fost efectuata cu succes !")
+                print("====================================")
+        if verificare_1 == 0:
+            print("Serialul nu exista ,mai incearca ! ")
 
 
-def snooze_serie(title):
-    database.snooze_serie(title)
+def snooze_serie():
+    list_series = database.get_series()
+    titles = ""
+    for serie in list_series:
+        titles = titles + serie[0] + "=" + str(serie[5]) + " ; "
+    print("Serialele care nu sunt pe snooze")
+    print(titles)
+    verificare_1 = 0
+    while verificare_1 == 0:
+        title = input("Ce serial vrei sa pui pe snooze ? : ")
+        for serie in list_series:
+            title_database = serie[0]
+            if title_database == title:
+                verificare_1 = 1
+                database.snooze_serie(title)
+                print("====================================")
+                print("Comanda a fost efectuata cu succes !")
+                print("====================================")
+        if verificare_1 == 0:
+            print("Nu poti face snooze pe acest serial,mai incearca ! ")
 
 
-def unsnooze_serie(title):
-    database.unsnooze_serie(title)
+def unsnooze_serie():
+    list_series = database.get_series_snooze()
+    titles = ""
+    for serie in list_series:
+        titles = titles + serie[0] + "=" + str(serie[1]) + " ; "
+    print("Serialele care sunt deja pe snooze")
+    print(titles)
+    verificare_1 = 0
+    while verificare_1 == 0:
+        title = input("Ce serial vrei sa pui pe unsnooze ? : ")
+        for serie in list_series:
+            title_database = serie[0]
+            if title_database == title:
+                verificare_1 = 1
+                database.unsnooze_serie(title)
+                print("====================================")
+                print("Comanda a fost efectuata cu succes !")
+                print("====================================")
+        if verificare_1 == 0:
+            print("Nu poti face snooze pe acest serial,mai incearca ! ")
 
 
-def modify_score(title, score):
-    database.update_score(title, score)
+def modify_score():
+    list_series = database.get_all_series()
+    titles = ""
+    for serie in list_series:
+        titles = titles + serie[0] + "=" + str(serie[2]) + " ; "
+    print("Serialele au scorul :")
+    print(titles)
+    print("")
+    verificare_1 = 0
+    while verificare_1 == 0:
+        title = input("Ce serial vrei sa modifici ? : ")
+        for serie in list_series:
+            title_database = serie[0]
+            if title_database == title:
+                verificare_1 = 1
+                verificare_2 = 0
+                while verificare_2 == 0:
+                    score_input = input("Alege un scor de la 1 la 10: ")
+                    if 0 < int(score_input) <= 10:
+                        database.update_score(title, score_input)
+                        verificare_2 = 1
+                        print("====================================")
+                        print("Comanda a fost efectuata cu succes !")
+                        print("====================================")
+                    else:
+                        print("Scorul nu exista,mai incearca !")
+        if verificare_1 == 0:
+            print("Acest serial nu se afla in baza de date,mai incearca !")
 
 
 def listare():

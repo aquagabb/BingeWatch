@@ -30,18 +30,13 @@ def task1():
             commands.listare()
             ok = 0
         elif comanda.find("Stergere serial") != -1:
-            title = input("Ce serial vrei sa stergi ? : ")
-            commands.delete_serie(title)
+            commands.delete_serie()
         elif comanda.find("Modificare scor") != -1:
-            title = input("Ce serial vrei sa modifici ? : ")
-            score = input("Introdu scor : ")
-            commands.modify_score(title, score)
+            commands.modify_score()
         elif comanda.find("unsnooze") != -1:
-            title = input("Ce serial vrei sa pui pe unsnooze ? : ")
-            commands.unsnooze_serie(title)
+            commands.unsnooze_serie()
         elif comanda.find("snooze") != -1:
-            title = input("Ce serial vrei sa pui pe snooze ? : ")
-            commands.snooze_serie(title)
+            commands.snooze_serie()
         elif comanda.find("Modificare episod") != -1:
             commands.modify_last_episode()
         elif comanda.find("youtube") != -1:
