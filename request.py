@@ -73,7 +73,7 @@ def get_numberOfSeasons(link):
         index_seasons = seasons_variable.find('"')
         if index_seasons != -1:
             number_of_seasons = seasons_variable[0:index_seasons]
-        print(number_of_seasons)
+        # print(number_of_seasons)
         # print('https://www.imdb.com' + link_request_season + seasons)
         return number_of_seasons, link_request_season
     elif r.status_code == 404:
@@ -93,3 +93,23 @@ def get_numberOfEpisodes_season(link):
         if index_seasons != -1:
             number_of_episodes = number_of_episodes[0:index_seasons]
         return number_of_episodes
+    elif r.status_code == 404:
+        number_of_episodes = 0
+        return number_of_episodes
+
+
+def videos_youtube(query):
+    query = query.strip().replace(" ", "+")
+    serial_url = 'https://www.youtube.com/results?search_query=' + query
+    r = requests.get(url=serial_url)
+    if r.status_code == 200:
+        videos_id = '"videoRenderer":{"videoId":"'
+        result_episodes = re.search(videos_id, r.text)
+        video = result_episodes.string[result_episodes.end():result_episodes.end() + 11]
+        # print(r.status_code)
+        print(video)
+        link_youtube = 'https://www.youtube.com/watch?v=' + video
+        return link_youtube
+    elif r.status_code == 404:
+        link_youtube = ''
+        return link_youtube
