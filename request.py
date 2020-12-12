@@ -62,8 +62,6 @@ def get_numberOfSeasons(link):
         serial_url = "https://www.imdb.com/title/" + link + "/"
     r = requests.get(url=serial_url)
     if r.status_code == 200:
-        # getEpisodes
-        # print (r.text)
         search_seasons = '<br class="clear" />'
         result_seasons = re.search(search_seasons, r.text)
         number_of_seasons = result_seasons.string[result_seasons.end() + 80:result_seasons.end() + 115]
@@ -73,8 +71,6 @@ def get_numberOfSeasons(link):
         index_seasons = seasons_variable.find('"')
         if index_seasons != -1:
             number_of_seasons = seasons_variable[0:index_seasons]
-        # print(number_of_seasons)
-        # print('https://www.imdb.com' + link_request_season + seasons)
         return number_of_seasons, link_request_season
     elif r.status_code == 404:
         number_of_seasons = 0

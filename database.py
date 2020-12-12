@@ -19,6 +19,22 @@ def create_table():
     cursor.close()
 
 
+def create_table_youtube():
+    connection = sqlite3.connect('imdb.db')
+    cursor = connection.cursor()
+    # CREATE TABLE TVseries
+    sqlite_create_table_query = """CREATE TABLE IF NOT EXISTS youtube (
+                                               id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                               title TEXT NOT NULL,
+                                               season INTEGER NOT NULL,
+                                               episode INTEGER NOT NULL,
+                                               linkYoutube TEXT NOT NULL
+                                               )"""
+    cursor.execute(sqlite_create_table_query)
+    connection.commit()
+    cursor.close()
+
+
 def add_serie(title, episodes, score, link_imdb, last_episode, last_view, snooze):
     try:
         connection = sqlite3.connect('imdb.db')
@@ -42,7 +58,7 @@ def delete_serie(title):
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
         sql_delete_query = """DELETE from series where title = ?"""
-        cursor.execute(sql_delete_query, (title, ))
+        cursor.execute(sql_delete_query, (title,))
         connection.commit()
         cursor.close()
 
@@ -123,3 +139,31 @@ def update_episodes(title, episodes):
 
     except sqlite3.Error as error:
         print("Failed to update sqlite table", error)
+
+
+def add_video_youtube(title, season, episodes, link_youtube):
+    try:
+        connection = sqlite3.connect('imdb.db')
+        cursor = connection.cursor()
+        sqlite_insert_with_param = """INSERT INTO 'youtube'
+                          ('title', 'season', 'episode', 'linkYoutube') 
+                          VALUES (?, ?, ?, ?);"""
+
+        data_tuple = (title, season, episodes, link_youtube)
+        cursor.execute(sqlite_insert_with_param, data_tuple)
+        connection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Error while working with SQLite", error)
+
+
+def print_youtube():
+    connection = sqlite3.connect('imdb.db')
+    cursor = connection.cursor()
+    sqlite_select_query = """SELECT * FROM youtube"""
+    cursor.execute(sqlite_select_query)
+    records = cursor.fetchall()
+    for i in records:
+        print(i)
+    cursor.close()
