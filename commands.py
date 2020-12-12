@@ -1,5 +1,4 @@
 import request
-
 import database
 from datetime import datetime
 
@@ -84,3 +83,30 @@ def get_series():
         elif new_episodes == 0:
             print("Nu s-a putut face request de la IMDB")
 
+
+def modify_last_episode():
+    list_series = database.get_series()
+    verificare_1 = 1
+    while verificare_1 == 1:
+        title = input("Ce serial vrei sa modifici ? : ")
+        for serie in list_series:
+            title_database = serie[0]
+            if title_database == title:
+                verificare_1 = 0
+                current_episodes = int(serie[1])
+                last_episode = serie[4]
+                print("Numarul total de episoade : " + str(current_episodes))
+                print("Ultimul episod vazut : " + str(last_episode))
+                verificare_2 = 1
+                while verificare_2 == 1:
+                    new_last_episode = input("Episod : ")
+                    if int(new_last_episode) <= current_episodes:
+                        database.modify_episode(title, new_last_episode)
+                        print("====================================")
+                        print("Comanda a fost efectuata cu succes !")
+                        print("====================================")
+                        verificare_2 = 0
+                    else:
+                        print("Acest episod nu exista,mai incearca !")
+        if verificare_1 == 1:
+            print("Acest serial nu se afla in baza de date !")

@@ -14,6 +14,7 @@ def task1():
         print("                          Modificare scor")
         print("                          snooze/unsnooze")
         print("                          Listare")
+        print("                          Modificare episod")
 
         # database.add_serie('Costume', 120, 10, 'https://www.imdb.com/title/tt1632701/?ref_=fn_al_tt_1', 120,
         # datetime.now(), 0)
@@ -41,6 +42,8 @@ def task1():
         elif comanda.find("snooze") != -1:
             title = input("Ce serial vrei sa pui pe snooze ? : ")
             commands.snooze_serie(title)
+        elif comanda.find("Modificare episod") != -1:
+            commands.modify_last_episode()
 
 
 def task2():
