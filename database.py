@@ -187,6 +187,5 @@ def print_youtube():
     sqlite_select_query = """SELECT * FROM youtube"""
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()
-    for i in records:
-        print(i)
     cursor.close()
+    return records

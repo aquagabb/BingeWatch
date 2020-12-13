@@ -3,41 +3,56 @@ import database
 from datetime import datetime
 
 
-def adaugare_serial(link, score):
+def adaugare_serial(link):
     link_imdb = link
     title, episodes = request.get_informations(link.replace(" ", ""))
     if title != "" and episodes != "":
         print("Numarul de episoade al serialului " + title + " este " + episodes)
-        last_episode = input("Care a fost ultimul episod vazut ? : ")
-        date_entry = input("Introdu data in care ai vazut ultimul episod (Format:year-month-day-hour) sau today : ")
-        if date_entry.find("today") != -1:
-            last_view = datetime.now()
-        else:
-            year, month, day, hour = map(int, date_entry.split('-'))
-            last_view = datetime(year, month, day, hour)
-        snooze = 0
-        database.add_serie(title, episodes, int(score), link_imdb, last_episode, last_view, snooze)
-        seasons, new_link = request.get_numberOfSeasons(link)
-        number_seasons = int(seasons)
-        suma_episoadelor = int(episodes)
-        ok = 0
-        last_episode_viewed = int(last_episode)
-        while number_seasons > 0 and ok == 0:
-            link_episodes = 'https://www.imdb.com' + new_link + str(number_seasons)
-            number_episodes = request.get_numberOfEpisodes_season(link_episodes)
-            if suma_episoadelor >= last_episode_viewed >= suma_episoadelor - int(
-                    number_episodes):
-                episod_din_sezon = int(last_episode_viewed) - (suma_episoadelor - int(number_episodes))
-                query = title + ' season ' + str(number_seasons) + ' episode ' + str(episod_din_sezon)
-                link_youtube = request.videos_youtube(query)
-                database.add_video_youtube(title, number_seasons, episod_din_sezon, link_youtube)
-                ok = 1
+        verificare_1 = 0
+        while verificare_1 == 0:
+            last_episode = input("Care a fost ultimul episod vazut ? : ")
+            if 0 < int(last_episode) <= int(episodes):
+                verificare_1 = 1
+                date_entry = input("Introdu data in care ai vazut ultimul episod (Format:year-month-day-hour) sau "
+                                   "today : ")
+                if date_entry.find("today") != -1:
+                    last_view = datetime.now()
+                else:
+                    year, month, day, hour = map(int, date_entry.split('-'))
+                    last_view = datetime(year, month, day, hour)
+                verificare_3 = 0
+                while verificare_3 == 0:
+                    score = input("Alege un scor de la 1 la 10: ")
+                    if 0 < int(score) <= 10:
+                        verificare_3 = 1
+                        snooze = 0
+                        database.add_serie(title, episodes, int(score), link_imdb, last_episode, last_view, snooze)
+                        seasons, new_link = request.get_numberOfSeasons(link)
+                        number_seasons = int(seasons)
+                        suma_episoadelor = int(episodes)
+                        ok = 0
+                        last_episode_viewed = int(last_episode)
+                        while number_seasons > 0 and ok == 0:
+                            link_episodes = 'https://www.imdb.com' + new_link + str(number_seasons)
+                            number_episodes = request.get_numberOfEpisodes_season(link_episodes)
+                            if suma_episoadelor >= last_episode_viewed >= suma_episoadelor - int(
+                                    number_episodes):
+                                episod_din_sezon = int(last_episode_viewed) - (suma_episoadelor - int(number_episodes))
+                                query = title + ' season ' + str(number_seasons) + ' episode ' + str(episod_din_sezon)
+                                link_youtube = request.videos_youtube(query)
+                                database.add_video_youtube(title, number_seasons, episod_din_sezon, link_youtube)
+                                ok = 1
+                            else:
+                                suma_episoadelor = suma_episoadelor - int(number_episodes)
+                            number_seasons = number_seasons - 1
+                    else:
+                        print("Scorul nu exista,mai incearca !")
             else:
-                suma_episoadelor = suma_episoadelor - int(number_episodes)
-            number_seasons = number_seasons - 1
+                print("Episodul nu exista,mai incearca !")
+
     else:
         print("Nu s-a putut face request de la IMDB")
-    print(database.print_youtube())
+    print_link_youtube()
 
 
 def delete_serie():
@@ -183,6 +198,24 @@ def modify_last_episode():
                         print("Comanda a fost efectuata cu succes !")
                         print("====================================")
                         verificare_2 = 0
+                        seasons, new_link = request.get_numberOfSeasons(serie[3])
+                        number_seasons = int(seasons)
+                        suma_episoadelor = int(current_episodes)
+                        ok = 0
+                        last_episode_viewed = int(last_episode)
+                        while number_seasons > 0 and ok == 0:
+                            link_episodes = 'https://www.imdb.com' + new_link + str(number_seasons)
+                            number_episodes = request.get_numberOfEpisodes_season(link_episodes)
+                            if suma_episoadelor >= last_episode_viewed >= suma_episoadelor - int(
+                                    number_episodes):
+                                episod_din_sezon = int(last_episode_viewed) - (suma_episoadelor - int(number_episodes))
+                                query = title + ' season ' + str(number_seasons) + ' episode ' + str(episod_din_sezon)
+                                link_youtube = request.videos_youtube(query)
+                                database.add_video_youtube(title, number_seasons, episod_din_sezon, link_youtube)
+                                ok = 1
+                            else:
+                                suma_episoadelor = suma_episoadelor - int(number_episodes)
+                            number_seasons = number_seasons - 1
                     else:
                         print("Acest episod nu exista,mai incearca !")
         if verificare_1 == 1:
@@ -232,3 +265,33 @@ def search_youtube():
                         print("Acest sezon nu exista,mai incearca !")
         if verificare_1 == 0:
             print("Acest serial nu se afla in baza de date !")
+
+
+def print_link_youtube():
+    series = database.print_youtube()
+    print("")
+    for serie in series:
+        title = serie[1]
+        season = serie[2]
+        episode = serie[3]
+        link_youtube = serie[4]
+        print(str(title) + " , sezonul " + str(season) + " , episodul " + str(episode) + " => Link Youtube:" +
+              link_youtube)
+    print("")
+
+
+def notificare():
+    list_series = database.get_series()
+    for serie in list_series:
+        title = serie[0]
+        current_episodes = int(serie[1])
+        link = str(serie[3])
+        new_episodes = int(request.get_episodes(link))
+        if current_episodes < new_episodes:
+            print("")
+            print("=======================================================================")
+            print("Au mai aparut " + str(new_episodes - current_episodes) + " episoade noi in serialul " + str(title))
+            print("=======================================================================")
+            # database.update_episodes(title,new_episodes)
+        elif new_episodes == 0:
+            print("Nu s-a putut face request de la IMDB")

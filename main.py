@@ -1,11 +1,10 @@
 import commands
 import threading
 import time
-import database
 
 
 def task1():
-    time.sleep(0.01)
+    time.sleep(1)
     ok = 1
     while ok == 1:
         print("Comenzile existente sunt :")
@@ -24,8 +23,7 @@ def task1():
 
         if comanda.find("Adaugare serial") != -1:
             link = input("Introdu link : ")
-            scor = input("Introdu scor : ")
-            commands.adaugare_serial(link, scor)
+            commands.adaugare_serial(link)
         elif comanda.find("Listare") != -1:
             commands.listare()
             ok = 0
@@ -44,8 +42,8 @@ def task1():
 
 
 def task2():
-    database.create_table_youtube()
-    database.print_youtube()
+    commands.print_link_youtube()
+    commands.notificare()
 
 
 t1 = threading.Thread(target=task1, name='t1')

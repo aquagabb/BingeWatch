@@ -48,14 +48,6 @@ def get_episodes(link):
         return episoade
 
 
-#
-# id_movie = input()
-#
-# titlu, episoade_curente = get_informations(id_movie.replace(" ", ""))
-# print(titlu)
-# print(episoade_curente)
-
-
 def get_numberOfSeasons(link):
     if link.find('https:') != -1:
         serial_url = link
@@ -104,7 +96,7 @@ def videos_youtube(query):
         result_episodes = re.search(videos_id, r.text)
         video = result_episodes.string[result_episodes.end():result_episodes.end() + 11]
         # print(r.status_code)
-        print(video)
+        # print(video)
         link_youtube = 'https://www.youtube.com/watch?v=' + video
         return link_youtube
     elif r.status_code == 404:
