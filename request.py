@@ -3,6 +3,10 @@ import re
 
 
 def get_informations(movie):
+    """
+           Primeste ca parametrul link-ul de la IMDB si face request la el,va returna titlu si numarul de episoade
+           specific serialului de la link-ul respectiv.
+    """
     if movie.find('https:') != -1:
         serial_url = movie
     else:
@@ -28,6 +32,9 @@ def get_informations(movie):
 
 
 def get_episodes(link):
+    """
+        Primeste ca parametrul link-ul IMDB si face request la el,va returna numarul de episoade specific serialului
+    """
     if link.find('https:') != -1:
         serial_url = link
     else:
@@ -35,7 +42,6 @@ def get_episodes(link):
     r = requests.get(url=serial_url)
 
     if r.status_code == 200:
-        # getEpisodes
         search_episodes = 'span class="bp_sub_heading">'
         result_episodes = re.search(search_episodes, r.text)
         episoade = result_episodes.string[result_episodes.end():result_episodes.end() + 15]
@@ -49,6 +55,10 @@ def get_episodes(link):
 
 
 def get_numberOfSeasons(link):
+    """
+    Primeste ca parametrul link-ul IMDB si face request la el. Va returna numarul de sezoane specific serialului dar si
+    link-ul dupa care se va putea lua numarul de episoade din fiecare sezon.
+    """
     if link.find('https:') != -1:
         serial_url = link
     else:
@@ -72,6 +82,10 @@ def get_numberOfSeasons(link):
 
 
 def get_numberOfEpisodes_season(link):
+    """
+    Primeste ca parametrul link-ul IMDB obtinut de functia get_numberOfSeasons si face request la el,va returna numarul
+    de episoade specific sezonului
+    """
     r = requests.get(url=link)
     if r.status_code == 200:
         # print(r.text)
@@ -88,6 +102,10 @@ def get_numberOfEpisodes_season(link):
 
 
 def videos_youtube(query):
+    """
+     Primeste ca parametrul un string dat de utilizator de tipul "Titlu season x episode y" si va face request la
+     youtube folosind acest query.Va returna link-ul catre primul episod de pe youtube.
+    """
     query = query.strip().replace(" ", "+")
     serial_url = 'https://www.youtube.com/results?search_query=' + query
     r = requests.get(url=serial_url)
@@ -95,8 +113,6 @@ def videos_youtube(query):
         videos_id = '"videoRenderer":{"videoId":"'
         result_episodes = re.search(videos_id, r.text)
         video = result_episodes.string[result_episodes.end():result_episodes.end() + 11]
-        # print(r.status_code)
-        # print(video)
         link_youtube = 'https://www.youtube.com/watch?v=' + video
         return link_youtube
     elif r.status_code == 404:

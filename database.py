@@ -2,9 +2,11 @@ import sqlite3
 
 
 def create_table():
+    """
+           Se conecteaza la baza de date si se creeaza tabela 'series' in care se vor stoca informatiile despre seriale
+    """
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
-    # CREATE TABLE TVseries
     sqlite_create_table_query = """CREATE TABLE IF NOT EXISTS series (
                                            title TEXT PRIMARY KEY,
                                            episodes INTEGER NOT NULL,
@@ -20,9 +22,12 @@ def create_table():
 
 
 def create_table_youtube():
+    """
+       Se conecteaza la baza de date si se creeaza tabela 'youtube' in care se va stoca titli,ultimul episod vazut
+       dintr-un anume sezon si link-ul de pe youtube cu query-ul facut
+    """
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
-    # CREATE TABLE TVseries
     sqlite_create_table_query = """CREATE TABLE IF NOT EXISTS youtube (
                                                id INTEGER PRIMARY KEY AUTOINCREMENT,
                                                title TEXT NOT NULL,
@@ -36,6 +41,9 @@ def create_table_youtube():
 
 
 def add_serie(title, episodes, score, link_imdb, last_episode, last_view, snooze):
+    """
+        Se conecteaza la baza de date si se face un insert cu informatiile despre un serial in tabela 'series'
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -54,6 +62,10 @@ def add_serie(title, episodes, score, link_imdb, last_episode, last_view, snooze
 
 
 def delete_serie(title):
+    """
+          Primeste ca parametru titlu serialui care doreste utilizatorul sa fie sters si va fi eliminat din tabela
+          series
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -67,6 +79,9 @@ def delete_serie(title):
 
 
 def snooze_serie(title):
+    """
+           Primeste ca parametru titlu serialui si se va face un update pe snooze=1 pe serialul respectiv.
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -80,6 +95,10 @@ def snooze_serie(title):
 
 
 def modify_episode(title, episode):
+    """
+       Primeste ca parametru titlu serialui si episodul pe care il doreste utilizatorul sa fie modificat.Se va face un
+       update pentru ultimul episod vazut.
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -93,6 +112,9 @@ def modify_episode(title, episode):
 
 
 def unsnooze_serie(title):
+    """
+               Primeste ca parametru titlu serialui si se va face un update pe snooze=0 pe serialul respectiv.
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -106,6 +128,10 @@ def unsnooze_serie(title):
 
 
 def update_score(title, score):
+    """
+       Primeste ca parametru titlu serialui si scorul pe care il doreste utilizatorul sa il modifice.Se va face un
+       update pentru scorul ales al serialului respectiv.
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -119,6 +145,9 @@ def update_score(title, score):
 
 
 def get_all_series():
+    """
+           Va returna toate liniile din tabela series ordonate descrescator dupa scor
+    """
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
     sqlite_select_query = """SELECT * FROM series ORDER BY score DESC"""
@@ -128,6 +157,9 @@ def get_all_series():
 
 
 def get_series():
+    """
+        Va returna datele din tabela series ordonate descrescator dupa scor unde serialele nu sunt pe snooze.
+    """
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
     sqlite_select_query = """SELECT title,episodes,score,linkImdb,lastEpisode,snooze
@@ -140,6 +172,9 @@ def get_series():
 
 
 def get_series_snooze():
+    """
+            Va returna datele din tabela series ordonate descrescator dupa scor unde serialele sunt pe snooze.
+    """
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
     sqlite_select_query = """SELECT title,snooze
@@ -152,6 +187,10 @@ def get_series_snooze():
 
 
 def update_episodes(title, episodes):
+    """
+         Primeste ca parametru titlu serialui si numarul de episoade pe care il va modifica in baza de date.Comanda se
+         foloseste atunci cand dupa un request numarul de episoade nu este acelasi cu cel din baza de date.
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -165,6 +204,9 @@ def update_episodes(title, episodes):
 
 
 def add_video_youtube(title, season, episodes, link_youtube):
+    """
+        Primeste ca parametri informatiile specifice unui query catre youtube + link-ul catre " Title season x episode y
+    """
     try:
         connection = sqlite3.connect('imdb.db')
         cursor = connection.cursor()
@@ -182,6 +224,9 @@ def add_video_youtube(title, season, episodes, link_youtube):
 
 
 def print_youtube():
+    """
+         Functia returneaza datele din tabela youtube.
+    """
     connection = sqlite3.connect('imdb.db')
     cursor = connection.cursor()
     sqlite_select_query = """SELECT * FROM youtube"""
@@ -189,3 +234,4 @@ def print_youtube():
     records = cursor.fetchall()
     cursor.close()
     return records
+
