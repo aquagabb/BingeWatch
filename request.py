@@ -12,7 +12,6 @@ def get_informations(movie):
     if movie.find('https:') != -1:
         serial_url = movie
     else:
-        print("HELOO")
         serial_url = "https://www.imdb.com/title/" + movie + "/"
     r = requests.get(url=serial_url)
     if r.status_code == 200:
@@ -95,7 +94,6 @@ def get_numberOfEpisodes_season(link):
     """
     r = requests.get(url=link)
     if r.status_code == 200:
-        # print(r.text)
         search_episodes = 'itemprop="numberofEpisodes" content="'
         result_episodes = re.search(search_episodes, r.text)
         number_of_episodes = result_episodes.string[result_episodes.end():result_episodes.end() + 4]
