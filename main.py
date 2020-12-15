@@ -7,6 +7,7 @@ def task1():
     """
         Acest thread va fi folosit pentru verificarea inputului primit de utilizator. In cazul in care se potriveste
         cu o comanda anume,o va executa.
+        :return : none
     """
     time.sleep(1)
     ok = 1
@@ -46,6 +47,7 @@ def task2():
     """
            Acest thread va face fi folosit pentru notificarea in cazul in care apar episoade noi,dar va afisa si
            link-urile de pe youtube a ultimelor episoade vazute
+           :return : none
     """
     commands.print_link_youtube()
     commands.notificare()
@@ -61,5 +63,5 @@ t1.join()
 t2.join()
 
 # database.add_serie('Lista neagra', 120, 10, 'https://www.imdb.com/title/tt2741602/?ref_=fn_al_tt_1', 120,
-# "2019-12-12-20",0) database.add_serie('The crown', 130, 8, 'https://www.imdb.com/title/tt1632701/?ref_=fn_al_tt_1',
-# 120,"2019-12-12-20",0)
+# "2019-12-12-20",0)
+# database.add_serie('The crown', 130, 8, 'https://www.imdb.com/title/tt1632701/?ref_=fn_al_tt_1',120,"2019-12-12-20",0)

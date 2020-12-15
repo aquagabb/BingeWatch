@@ -5,11 +5,13 @@ from datetime import datetime
 
 def adaugare_serial(link):
     """
-         Functia primeste ca parametru link-ul dat de utilizator.Se va face request la IMDB pentru a se lua titlul
+         Se va face request la IMDB pentru a se lua titlul
          si numarul de episoade al serialului specific.Apoi utilizatorul va trebui sa completeze cateva informatii
          despre acel serial,ex:ultimul episod vazut,scorul,cand a fost vazut. Input-ul primit de utilizator va trece
-         printr-o serie de verificari. In final,dupa ce se aduna toate informatiile,functia .e va adauga in baza de date
+         printr-o serie de verificari. In final,dupa ce se aduna toate informatiile,functia va adauga in baza de date
          in tabela 'series' dar si link-ul ultimului episod vazut in tabela 'youtube'
+         :param link : Functia primeste ca parametru link-ul dat de utilizator.
+         :return : none
     """
     link_imdb = link
     title, episodes = request.get_informations(link.replace(" ", ""))
@@ -66,6 +68,7 @@ def delete_serie():
     """
            Functia va cere utilizatorului un input cu titlui serialului care doreste sa fie sters.Acesta va trece
            printr-o verificare si daca serialul exista,il va sterge din tabela 'series'.
+           :return : none
     """
     list_series = database.get_all_series()
     titles = ""
@@ -93,6 +96,7 @@ def snooze_serie():
     """
         Functia va cere utilizatorului un input cu titlui serialului care va trece printr-o verificare si daca serialul
         exista il va pune pe snooze daca nu este deja.
+        :return : none
     """
     list_series = database.get_series()
     titles = ""
@@ -119,6 +123,7 @@ def unsnooze_serie():
     """
         Functia va cere utilizatorului un input cu titlui serialului care va trece printr-o verificare si daca serialul
         exista il va pune pe unsnooze daca nu este deja.
+        :return : none
     """
     list_series = database.get_series_snooze()
     titles = ""
@@ -145,6 +150,7 @@ def modify_score():
     """
         Functia va cere utilizatorului un input cu titlui serialului care va trece printr-o verificare si daca serialul
         exista ii va cere un scor valid si apoi va modifica in baza de date scorul serialului ales.
+        :return : none
     """
     list_series = database.get_all_series()
     titles = ""
@@ -180,6 +186,7 @@ def listare():
         Functia va parcurge serialele din baza de date si in momentul in care numarul de episoade din baza de date
         este mai mic decat numarul de episoade primit ca request de la IMDB il va anunta pe utilizator ca au mai aparut
         X episoade in serialul Y.
+        :return : none
     """
     list_series = database.get_series()
     for serie in list_series:
@@ -209,6 +216,7 @@ def modify_last_episode():
        Functia va cere utilizatorului un input cu titlui serialului care va trece printr-o verificare si daca serialul
        exista ii va cere un episod valid pentru a-l modifica in baza de date. Apoi se va face un request la youtube
        cu episodul pe care a dorit sa-l modifice si il va insera link-ul query-ului in baza de date.
+       :return : none
     """
     list_series = database.get_series()
     verificare_1 = 1
@@ -259,6 +267,7 @@ def search_youtube():
     """
         Functia cere titlul unui serial iar daca acesta exista in baza de date,utilizatorul poate sa caute pe youtube
         un anumit episod dintr-un sezon,aceasta cautare va fi inregistrata in tabela 'youtube'.
+        :return : none
     """
     list_series = database.get_series()
     titles = ""
@@ -308,6 +317,7 @@ def print_link_youtube():
     """
        Functia va afisa informatiile din tabela 'youtube',adica titlu,episodul,sezonul si link-ul catre youtube al
        ultimului episod vazut dar si a cautarilor utilizatorului.
+       :return : none
     """
     series = database.print_youtube()
     print("")
@@ -325,6 +335,7 @@ def notificare():
     """
        Functia va verifica daca exista episoade noi pentru fiecare serial din baza de date.In cazul in care exista,ii va
        afisa un mesaj utilizatorul si anume ca 'Au mai aparut x episoade noi in serialul Y'.
+       :return : none
     """
     list_series = database.get_series()
     for serie in list_series:

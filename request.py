@@ -4,8 +4,10 @@ import re
 
 def get_informations(movie):
     """
-           Primeste ca parametrul link-ul de la IMDB si face request la el,va returna titlu si numarul de episoade
+           Face request la link-ul primit,va returna titlu si numarul de episoade
            specific serialului de la link-ul respectiv.
+           :param movie : Primeste ca parametrul link-ul de la IMDB
+           :return : nume_titlu,episoade
     """
     if movie.find('https:') != -1:
         serial_url = movie
@@ -33,7 +35,9 @@ def get_informations(movie):
 
 def get_episodes(link):
     """
-        Primeste ca parametrul link-ul IMDB si face request la el,va returna numarul de episoade specific serialului
+        Face request la link-ul primit si va cauta numarul de episoade specific serialului
+        :param link : Primeste ca parametrul link-ul de la IMDB
+        :return : episoade
     """
     if link.find('https:') != -1:
         serial_url = link
@@ -56,8 +60,10 @@ def get_episodes(link):
 
 def get_numberOfSeasons(link):
     """
-    Primeste ca parametrul link-ul IMDB si face request la el. Va returna numarul de sezoane specific serialului dar si
+    Face request la link-ul primit si va cauta numarul de sezoane specific serialului dar si
     link-ul dupa care se va putea lua numarul de episoade din fiecare sezon.
+    :param link : Primeste ca parametrul link-ul de la IMDB
+    :return : number_of_seasons,link_request_season
     """
     if link.find('https:') != -1:
         serial_url = link
@@ -83,8 +89,9 @@ def get_numberOfSeasons(link):
 
 def get_numberOfEpisodes_season(link):
     """
-    Primeste ca parametrul link-ul IMDB obtinut de functia get_numberOfSeasons si face request la el,va returna numarul
-    de episoade specific sezonului
+    Functia face request la link-ul primit si va cauta numarul de episoade specific sezonului
+    :param link : Primeste ca parametrul link-ul de la IMDB
+    :return : number_of_episodes
     """
     r = requests.get(url=link)
     if r.status_code == 200:
@@ -103,8 +110,9 @@ def get_numberOfEpisodes_season(link):
 
 def videos_youtube(query):
     """
-     Primeste ca parametrul un string dat de utilizator de tipul "Titlu season x episode y" si va face request la
-     youtube folosind acest query.Va returna link-ul catre primul episod de pe youtube.
+     Va face request la youtube folosind acest query.Va cauta link-ul catre primul episod de pe youtube.
+     :param query : Primeste ca parametrul un string dat de utilizator de tipul "Titlu season x episode y"
+     :return : link_youtube
     """
     query = query.strip().replace(" ", "+")
     serial_url = 'https://www.youtube.com/results?search_query=' + query
